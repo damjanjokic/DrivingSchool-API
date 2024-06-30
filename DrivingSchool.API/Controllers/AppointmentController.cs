@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DrivingSchool.Application.Features.Appointments.CreateAppointment;
 using DrivingSchool.Application.Features.Appointments.GetAllByOrganiserId;
+using DrivingSchool.Application.Features.Appointments.GetByOrganiserAndDate;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,14 +32,16 @@ public class AppointmentController : ControllerBase
     }
     
     [HttpGet("organiser/{organiserId}")]
-    public async Task<IActionResult> GetAppointmentsByOrganiserId(Guid organiserId)
+    public async Task<IActionResult> GetAppointmentsByOrganiserIdAndDates(Guid organiserId, [FromQuery] List<DateTime> dates)
     {
-        var query = new GetAllByOrganiserIdQuery
+        var query = new GetByOrganiserAndDateQuery()
         {
-            Id = organiserId
+            OrganiserId = organiserId,
+            Dates = dates
         };
 
         var response = await _mediator.Send(query);
         return Ok(response);
     }
+    
 }

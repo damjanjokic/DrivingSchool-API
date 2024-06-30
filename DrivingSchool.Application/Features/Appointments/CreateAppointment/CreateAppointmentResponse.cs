@@ -2,5 +2,5 @@
 
 public class CreateAppointmentResponse
 {
-    public Guid Id { get; set; }
+    public List<Guid> Ids { get; set; }
 }

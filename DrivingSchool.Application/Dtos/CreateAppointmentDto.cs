@@ -1,19 +1,16 @@
-﻿using DrivingSchool.Core.Entities;
+using DrivingSchool.Application.Features.Appointments.CreateAppointment;
 using DrivingSchool.Core.Enumerations;
 
 namespace DrivingSchool.Application.Dtos;
 
-public class AppointmentDto
+public class CreateAppointmentDto
 {
-    public Guid Id { get; set; }
-    
+    [ValidAppointmentTimes]
     public DateTime StartTime { get; set; }
+    [ValidAppointmentTimes]
     public DateTime EndTime { get; set; }
     public string Description { get; set; }
     public AppointmentType Type { get; set; }
-    public bool Set { get; set; }
     
-    public User User { get; set; }
-    
-    public ICollection<UserAppointment> UserAppointments { get; set; }
+    public Guid? AttendeeId { get; set; }
 }

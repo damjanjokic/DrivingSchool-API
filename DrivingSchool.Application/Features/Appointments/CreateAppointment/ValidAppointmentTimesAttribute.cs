@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using DrivingSchool.Application.Dtos;
 
 namespace DrivingSchool.Application.Features.Appointments.CreateAppointment;
 
@@ -6,7 +7,7 @@ public class ValidAppointmentTimesAttribute : ValidationAttribute
 {
     protected override ValidationResult IsValid(object value, ValidationContext validationContext)
     {
-        var appointment = (CreateAppointmentRequest)validationContext.ObjectInstance;
+        var appointment = (CreateAppointmentDto)validationContext.ObjectInstance;
 
         if (appointment.StartTime <= DateTime.Now)
         {

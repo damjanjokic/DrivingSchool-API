@@ -26,6 +26,14 @@ public class AppointmentRepository : Repository<Appointment>, IAppointmentReposi
             .Where(x => x.UserAppointments.Any(y => !y.isCanceled) && x.UserId == userId)
             .ToListAsync();
 
+    public async Task<List<Appointment>> GetAllByOrganiserIdAndDates(Guid userId, List<DateTime> dates) =>
+        await Context.Appointments
+            .Include(x => x.User)
+            .Include(x => x.UserAppointments)
+            .ThenInclude(x => x.User)
+            .Where(x => x.UserId == userId && dates.Any(y=> y.Date == x.StartTime.Date))
+            .ToListAsync();
+
     public async Task<List<Appointment>> GetAllByAttendeeId(Guid userId) =>
         await Context.Appointments
             .Include(x => x.UserAppointments)
@@ -46,7 +54,8 @@ public class AppointmentRepository : Repository<Appointment>, IAppointmentReposi
                             (startTime <= a.StartTime && endTime >= a.EndTime)));
 
 
-        public async Task CreateAppointment(Appointment appointment) =>
-        await AddAsync(appointment);
+        public async Task CreateAppointments (List<Appointment> appointments) =>
+        await AddRange(appointments);
+        
     
 }

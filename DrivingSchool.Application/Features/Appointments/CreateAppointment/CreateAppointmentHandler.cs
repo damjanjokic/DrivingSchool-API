@@ -25,37 +25,28 @@ public class CreateAppointmentHandler : IRequestHandler<CreateAppointmentCommand
     public async Task<CreateAppointmentResponse> Handle(CreateAppointmentCommand request, CancellationToken cancellationToken)
     {
         //var userId = _userAccessor.GetCurrentUserId();
-        var appointment = _mapper.Map<Appointment>(request);
-        appointment.UserId = Guid.Parse("BCF63ECB-A507-4618-38EF-08DC961D72B8");
-
-        var isOverlapping = await 
-            _unitOfWork.Appointment.IsOverlappingAppointmentAsync(request.StartTime, request.EndTime,
-                appointment.UserId);
-        
-        if (isOverlapping)
+        var appointments = _mapper.Map<List<Appointment>>(request.Appointments);
+        foreach (var appointment in appointments)
         {
-            throw new RestException(HttpStatusCode.BadRequest, "Appointment is overlapping");
-        }
-
-        await _unitOfWork.Appointment.CreateAppointment(appointment);
-
-        if (request.AttendeeId != null)
-        {
-            appointment.UserAppointments = new List<UserAppointment>();
-            appointment.UserAppointments.Add(new UserAppointment()
+            
+            appointment.UserId = Guid.Parse("38db990d-d53a-4795-3fc5-08dc9848a982");
+            
+            var isOverlapping = await 
+                _unitOfWork.Appointment.IsOverlappingAppointmentAsync(appointment.StartTime, appointment.EndTime,
+                    appointment.UserId);
+            
+            if (isOverlapping)
             {
-                AppointmentId = appointment.Id,
-                UserId = request.AttendeeId.Value
-            });
-            appointment.Set = true;
+                throw new RestException(HttpStatusCode.BadRequest, "Appointment is overlapping");
+            }
         }
-        
-        
+
+        await _unitOfWork.Appointment.CreateAppointments(appointments);
         await _unitOfWork.SaveAsync();
 
         return new CreateAppointmentResponse()
         {
-            Id = appointment.Id
+            Ids = appointments.Select(x => x.Id).ToList()
         };
     }
 }

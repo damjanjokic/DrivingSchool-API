@@ -6,5 +6,5 @@ namespace DrivingSchool.Application.Features.Appointments.GetAllByOrganiserId;
 
 public class GetAllByOrganiserIdResponse
 {
-    public List<AppointmentDto> Appointments { get; set; }
+    public List<GetAppointmentDto> Appointments { get; set; }
 }

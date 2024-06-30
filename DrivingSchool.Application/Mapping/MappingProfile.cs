@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DrivingSchool.Application.Dtos;
 using DrivingSchool.Application.Features.Appointments.CreateAppointment;
+using DrivingSchool.Application.Features.Appointments.GetByOrganiserAndDate;
 using DrivingSchool.Application.Features.Authentication.LoginUser;
 using DrivingSchool.Application.Features.Authentication.RegisterUser;
 using DrivingSchool.Core.Entities;
@@ -27,9 +28,12 @@ public class MappingProfile : Profile
         //CreateAppointment
         CreateMap<CreateAppointmentRequest, CreateAppointmentCommand>();
         CreateMap<CreateAppointmentCommand, Appointment>();
+        CreateMap<CreateAppointmentDto, Appointment>();
         
         //GetAllByOrganisationId
-        CreateMap<Appointment, AppointmentDto>();
+        CreateMap<Appointment, GetAppointmentDto>();
+        
+        //GetByOrganiserAndDates
 
         #endregion
     }

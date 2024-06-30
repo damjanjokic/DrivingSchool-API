@@ -24,7 +24,7 @@ public class GetAllByOrganiserIdHandler : IRequestHandler<GetAllByOrganiserIdQue
         var appointments = await _unitOfWork.Appointment.GetAllByOrganiserId(request.Id);
         var response = new GetAllByOrganiserIdResponse()
         {
-            Appointments = _mapper.Map<List<AppointmentDto>>(appointments)
+            Appointments = _mapper.Map<List<GetAppointmentDto>>(appointments)
         };
 
         return response;
