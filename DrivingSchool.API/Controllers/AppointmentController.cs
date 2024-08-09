@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using DrivingSchool.Application.Features.Appointments.CancelAppointment;
 using DrivingSchool.Application.Features.Appointments.CreateAppointment;
+using DrivingSchool.Application.Features.Appointments.DeleteAppointment;
 using DrivingSchool.Application.Features.Appointments.GetAllByOrganiserId;
 using DrivingSchool.Application.Features.Appointments.GetByOrganiserAndDate;
 using MediatR;
@@ -43,5 +45,32 @@ public class AppointmentController : ControllerBase
         var response = await _mediator.Send(query);
         return Ok(response);
     }
-    
+
+    [HttpPatch("cancelAppointment/{id}")]
+    public async Task<IActionResult> CancelAppointment(Guid id, [FromBody] CancelAppointmentRequest request)
+    {
+        if (!ModelState.IsValid) return BadRequest();
+
+        var command = new CancelAppointmentCommand()
+        {
+            Id = id,
+            Reason = request.Reason
+        };
+
+        var response = await _mediator.Send(command);
+        return Ok(response);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteAppointment(Guid id)
+    {
+        var command = new DeleteAppointmentCommand()
+        {
+            Id = id
+        };
+
+        var response = await _mediator.Send(command);
+
+        return Ok(response);
+    }
 }

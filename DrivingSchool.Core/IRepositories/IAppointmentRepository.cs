@@ -2,9 +2,9 @@
 
 namespace DrivingSchool.Core.IRepositories;
 
-public interface IAppointmentRepository
+public interface IAppointmentRepository : IRepository<Appointment>
 {
-    Task<Appointment> GetById(Guid id);
+    Task<Appointment> GetById(Guid id, bool includeUserAppointment = false);
     Task<List<Appointment>> GetAllByOrganiserId(Guid userId);
     Task<List<Appointment>> GetNotCanceledByOrganiserId(Guid userId);
     Task<List<Appointment>> GetAllByOrganiserIdAndDates(Guid userId, List<DateTime> dates);

@@ -13,4 +13,4 @@ public class User : IdentityUser<Guid>
     public Organisation Organisation { get; set; }
     public ICollection<UserAppointment> UserAppointments { get; set; }
     public bool isDeleted { get; set; }
-} 
+}

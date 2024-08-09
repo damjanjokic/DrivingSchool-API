@@ -7,7 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Folder Include="Features\Appointments\GetSingleById" />
       <Folder Include="Features\Authentication\LogoutUser" />
+      <Folder Include="Helpers" />
     </ItemGroup>
 
     <ItemGroup>

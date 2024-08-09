@@ -34,7 +34,21 @@ public class MappingProfile : Profile
         CreateMap<Appointment, GetAppointmentDto>();
         
         //GetByOrganiserAndDates
-
+        CreateMap<Appointment, GetAppointmentInfoDto>()
+            .ForMember(x => x.Date, opt =>
+                opt.MapFrom(y => y.StartTime.ToString("dd.MM.yyyy")))
+            .ForMember(x => x.Day, opt =>
+                opt.MapFrom(y => y.StartTime.Date.ToString("dddd")))
+            .ForMember(x => x.Time, opt =>
+                opt.MapFrom(a => String.Concat(a.StartTime.ToString("HH:mm"), " - ", a.EndTime.ToString("HH:mm"))))
+            .ForMember(x => x.UserCanceled, opt => 
+                opt.MapFrom(a => 
+                    a.UserAppointments.FirstOrDefault().UserCanceled.FirstName + " " + a.UserAppointments.FirstOrDefault().UserCanceled.LastName))
+            .ForMember(x => x.Attendee, opt =>
+                opt.MapFrom(y => 
+                    y.UserAppointments.FirstOrDefault().User.FirstName + " " + y.UserAppointments.FirstOrDefault().User.FirstName));
+        
+        
         #endregion
     }
 }

@@ -29,6 +29,7 @@ public class ApplicationContext : IdentityDbContext<User, IdentityRole<Guid>, Gu
             .HasConversion(x => x.ToString(), x => (AppointmentType)Enum.Parse(typeof(AppointmentType), x));
         
         builder.ConfigureManyToManyRelationships();
+        builder.ConfigureQueryFilters();
     }
     
     public override int SaveChanges()

@@ -11,8 +11,20 @@ public class AppointmentRepository : Repository<Appointment>, IAppointmentReposi
     {
     }
 
-    public async Task<Appointment> GetById(Guid id) =>
-        await GetAsync(id);
+    public async Task<Appointment> GetById(Guid id, bool includeUserAppointmnet = false)
+    {
+        if (includeUserAppointmnet)
+        {
+           return await Context.Appointments
+                .Include(x => x.UserAppointments)
+                .SingleOrDefaultAsync(x => x.Id == id);
+        }
+        else
+        {
+           return await GetAsync(id);
+        }
+    }
+        
 
     public async Task<List<Appointment>> GetAllByOrganiserId(Guid userId) =>
         await Context.Appointments
@@ -32,6 +44,7 @@ public class AppointmentRepository : Repository<Appointment>, IAppointmentReposi
             .Include(x => x.UserAppointments)
             .ThenInclude(x => x.User)
             .Where(x => x.UserId == userId && dates.Any(y=> y.Date == x.StartTime.Date))
+            .OrderBy(x => x.StartTime)
             .ToListAsync();
 
     public async Task<List<Appointment>> GetAllByAttendeeId(Guid userId) =>

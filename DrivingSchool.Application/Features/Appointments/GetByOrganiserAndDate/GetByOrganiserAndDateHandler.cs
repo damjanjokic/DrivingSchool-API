@@ -1,4 +1,6 @@
 using AutoMapper;
+using DrivingSchool.Application.Dtos;
+using DrivingSchool.Application.Extensions;
 using DrivingSchool.Core.IUnitOfWork;
 using DrivingSchool.Infrastructure.Interfaces;
 using MediatR;
@@ -18,8 +20,20 @@ public class GetByOrganiserAndDateHandler : IRequestHandler<GetByOrganiserAndDat
         _userAccessor = userAccessor;
     }
     
-    public Task<GetByOrganiserAndDateResponse> Handle(GetByOrganiserAndDateQuery request, CancellationToken cancellationToken)
+    public async Task<GetByOrganiserAndDateResponse> Handle(GetByOrganiserAndDateQuery request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var onlyDates = request.Dates.Select(x => x.Date.Date).ToList();
+        var appointments = await _unitOfWork.Appointment.GetAllByOrganiserIdAndDates(request.OrganiserId, onlyDates);
+        foreach (var appointment in appointments)
+        {
+            appointment.StartTime = appointment.StartTime.ConvertToTimeZone("Central Europe Standard Time");
+            appointment.EndTime = appointment.EndTime.ConvertToTimeZone("Central Europe Standard Time");
+        }
+        var appointmentsDto = _mapper.Map<List<GetAppointmentInfoDto>>(appointments);
+        return new GetByOrganiserAndDateResponse()
+        {
+            Appointments = appointmentsDto
+        };
+        
     }
 }

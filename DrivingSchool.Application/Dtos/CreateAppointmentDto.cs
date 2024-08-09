@@ -9,7 +9,7 @@ public class CreateAppointmentDto
     public DateTime StartTime { get; set; }
     [ValidAppointmentTimes]
     public DateTime EndTime { get; set; }
-    public string Description { get; set; }
+    public string Note { get; set; }
     public AppointmentType Type { get; set; }
     
     public Guid? AttendeeId { get; set; }
