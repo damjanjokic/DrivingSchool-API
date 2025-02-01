@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: BuckleApp.API/Dockerfile
+    ports:
+      - "5001:5001"  # Exposing the app on localhost:5000
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Database=BuckleApp;User=sa;Password=password123!;TrustServerCertificate=True;
+    depends_on:
+      - db  # Ensure the database starts before the app
+    networks:
+      - app-network
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Password123!"
+    ports:
+      - "1434:1434"  # Exposing SQL Server on port 1433
+    volumes:
+      - mssql-data:/var/opt/mssql  # Persist data using Docker volumes
+    networks:
+      - app-network
+
+volumes:
+  mssql-data:
+
+networks:
+  app-network:
